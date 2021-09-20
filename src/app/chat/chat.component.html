@@ -1,0 +1,50 @@
+<div class="card m-4">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+            <li class="nav-item mx-1" *ngIf="!conectado">
+                <input type="text" class="form-control" placeholder="Username ..." name="usermame"
+                    [(ngModel)]="mensaje.username" />
+            </li>
+            <li class="nav-item mx-1">
+                <button class="btn btn-success" type="button" (click)="conectar()" *ngIf="!conectado"
+                    [disabled]="!mensaje.username">Conectar</button>
+            </li>
+            <li class="nav-item mx-1">
+                <button class="btn btn-warning" type="button" (click)="desconectar()" *ngIf="conectado">Cerrar Chat</button>
+            </li>
+        </ul>
+    </div>
+    <div #scrollChat [scrollTop]="scrollChat.scrollHeight" class="card-body p-1" style="overflow-y: scroll; height: 360px;" *ngIf="conectado">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item list-group-item-light" *ngFor="let mensaje of mensajes">
+                <span *ngIf="mensaje.tipo=='NUEVO_USUARIO'">
+                    {{mensaje.fecha | date:'shortTime'}} @ {{mensaje.texto}}
+                    <span [ngStyle]="{color: mensaje.color}">
+                        {{mensaje.username}}
+                    </span>
+                </span>
+                <span *ngIf="mensaje.tipo=='MENSAJE'">
+                    {{mensaje.fecha | date:'shortTime'}}
+                    <span [ngStyle]="{color: mensaje.color}">
+                        {{mensaje.username}}
+                    </span>
+                    dice:<br> {{mensaje.texto}}
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div class="card-footer" *ngIf="conectado">
+        <form class="form-inline">
+            <div class="row g-2">
+                <div class="col-auto">
+                    <input type="text" class="form-control" placeholder="Escribe un mensaje ..." name="texto"
+                        [(ngModel)]="mensaje.texto" (keyup)="escribiendoEvento()"/>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit" (click)="enviarMensaje()">Enviar</button>
+                </div>
+            </div>
+        </form>
+        <div>{{escribiendo}}</div>
+    </div>
+</div>
